@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>YouTube Downloader</title>
+</head>
+
+<body style="font-family:sans-serif;text-align:center;margin-top:100px;">
+
+<h1>🎬 YouTube Downloader</h1>
+
+<input id="url" placeholder="วางลิงก์" style="width:300px;padding:10px;"><br><br>
+
+<button onclick="paste()">Paste</button>
+<button onclick="clearInput()">Clear</button>
+<button onclick="download()">Download</button>
+
+<p id="status"></p>
+
+<script>
+async function download() {
+    const url = document.getElementById("url").value;
+    const status = document.getElementById("status");
+
+    if (!url) {
+        status.innerText = "❌ ใส่ลิงก์ก่อน";
+        return;
+    }
+
+    status.innerText = "⏳ กำลังโหลด...";
+
+    const res = await fetch("/download", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({url})
+    });
+
+    const blob = await res.blob();
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "video.mp4";
+    a.click();
+
+    status.innerText = "✅ เสร็จแล้ว!";
+}
+</script>
+
+</body>
+</html>
