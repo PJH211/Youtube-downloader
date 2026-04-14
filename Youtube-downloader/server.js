@@ -1,30 +1,17 @@
 const express = require("express");
 const cors = require("cors");
-const { exec } = require("child_process");
-const path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/public/index.html");
+});
+
 app.post("/download", (req, res) => {
-    const url = req.body.url;
-
-    if (!url) return res.send("No URL");
-
-    const file = "video.mp4";
-
-    const command = `yt-dlp -f mp4 -o "${file}" "${url}"`;
-
-    exec(command, (err) => {
-        if (err) {
-            console.log(err);
-            return res.send("Download error");
-        }
-
-        res.download(file);
-    });
+    res.send("Server ทำงานแล้ว แต่ยังไม่เชื่อม yt-dlp");
 });
 
 app.listen(3000, () => {
